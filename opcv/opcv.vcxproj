@@ -155,9 +155,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="opcv.cpp" />
+    <ClCompile Include="SerialPortReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\pic.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SerialPortReader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

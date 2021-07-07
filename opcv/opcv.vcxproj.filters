@@ -18,10 +18,18 @@
     <ClCompile Include="opcv.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="SerialPortReader.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\pic.jpg">
       <Filter>資源檔</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SerialPortReader.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
