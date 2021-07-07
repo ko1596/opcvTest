@@ -34,7 +34,7 @@ void SerialPortReader::SetTimeOuts()
 {
 	TimeOuts.ReadIntervalTimeout = MAXDWORD;
 	TimeOuts.ReadTotalTimeoutMultiplier = 1;
-	TimeOuts.ReadTotalTimeoutConstant = 100;
+	TimeOuts.ReadTotalTimeoutConstant = 50;
 
 	TimeOuts.WriteTotalTimeoutMultiplier = 1;
 	TimeOuts.WriteTotalTimeoutConstant = 1;

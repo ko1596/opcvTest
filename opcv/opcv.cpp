@@ -9,47 +9,77 @@ using namespace cv;
 
 #include "SerialPortReader.h"
 
-#define BLOCK_SIZE 250
-HANDLE hCom;
+#define BLOCK_SIZE 100
 
-/** @defgroup VL53L1_define_RoiStatus_group Defines Roi Status
- *  Defines the read status mode
- *  @{
- */
-typedef uint8_t VL53L1_RoiStatus;
 
-#define VL53L1_ROISTATUS_NOT_VALID                 ((VL53L1_RoiStatus)  0)
-#define VL53L1_ROISTATUS_VALID_NOT_LAST            ((VL53L1_RoiStatus)  1)
-#define VL53L1_ROISTATUS_VALID_LAST                ((VL53L1_RoiStatus)  2)
-/** @} VL53L1_define_RoiStatus_group */
 
-typedef struct {
-	uint8_t RoiNumber;
-	VL53L1_RoiStatus RoiStatus;
-	int16_t RangeMilliMeter;
-}VL53L1_MultiRangingData_t;
-
-void DrawABlock(Mat *img, int heat, int X, int Y) {
-	Rect r(BLOCK_SIZE, BLOCK_SIZE, X, Y);
-	rectangle(*img, r, Scalar(0, 255 - heat, heat), -1);
-	imshow("Rainging", *img);
-	waitKey(10);
+void DrawABlock(Mat *img, int heat, int no) {
+	
+	int X = (no%4)*110;
+	int Y = (no/4)*110;
+	cout << "NO  " << no << "   " << X << "   " << Y << "    " << heat << endl;
+	Rect r(X, Y, BLOCK_SIZE, BLOCK_SIZE);
+	if (heat < 255 && heat>0)
+	{
+		rectangle(*img, r, Scalar(0, heat, 255 - heat), -1);
+		imshow("Rainging", *img);
+		waitKey(1);
+	}
+	else
+	{
+		rectangle(*img, r, Scalar(0, 255, 0), -1);
+		imshow("Rainging", *img);
+		waitKey(1);
+	}
+	
+	
 }
 
-void stringToData(char c, VL53L1_MultiRangingData_t *md[])
-{
 
+void SetMultiRangingData(string data, Mat *img)
+{
+	string::size_type begin = 0;
+	string::size_type end = string::npos;
+	string comma = ",";
+	vector<string> vdata;
+
+	end = data.find(comma);
+
+	while (end != string::npos)			//�P�_���O�̫�@�Ӧ줸
+	{
+		vdata.push_back(data.substr(begin, end - begin));		//����
+		begin = end + comma.size();		 //���ܶ}�l�M�䪺��m
+		end = data.find(comma, begin);		//��"�A"
+	}
+	vdata.push_back(data.substr(begin));
+	
+	
+	//cout << stoi(vdata[0]) << endl;
+	DrawABlock(img, 255 * stoi(vdata[2]) / 2000, stoi(vdata[0]));
+}
+
+void stringToData(char c, string *data, Mat *img)
+{
+	*data += c;
+	if (c == 10)
+	{
+		SetMultiRangingData(*data, img);
+		*data = "";
+		
+	}
 }
 
 int main()
 {
-	Mat img = Mat::zeros(Size(800, 600), CV_8UC3);
+	Mat img = Mat::zeros(Size(1600, 900), CV_8UC3);
+	string readerDataStr = "";
 	SerialPortReader spr(115200);
-	VL53L1_MultiRangingData_t MultiRangingData[16];
-	VL53L1_MultiRangingData_t *pMultiRangingData = &MultiRangingData[16];
+
 	img.setTo(255);              // 设置屏幕为白色
+	
+
 	while (true) {
-		stringToData(spr.GetChar(), &pMultiRangingData);
+		stringToData(spr.GetChar(), &readerDataStr, &img);
 	}
 
 	return 0;
