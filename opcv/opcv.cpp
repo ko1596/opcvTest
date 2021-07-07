@@ -17,7 +17,7 @@ void DrawABlock(Mat *img, int heat, int no) {
 	
 	int X = (no%4)*110;
 	int Y = (no/4)*110;
-	cout << "NO  " << no << "   " << X << "   " << Y << "    " << heat << endl;
+	//cout << "NO  " << no << "   " << X << "   " << Y << "    " << heat << endl;
 	Rect r(X, Y, BLOCK_SIZE, BLOCK_SIZE);
 	if (heat < 255 && heat>0)
 	{
@@ -71,7 +71,7 @@ void stringToData(char c, string *data, Mat *img)
 
 int main()
 {
-	Mat img = Mat::zeros(Size(1600, 900), CV_8UC3);
+	Mat img = Mat::zeros(Size(430, 430), CV_8UC3);
 	string readerDataStr = "";
 	SerialPortReader spr(115200);
 
